@@ -881,44 +881,98 @@
 
         // Convert USD to local currency
         function convertToLocalCurrency(usdAmount) {
+            // For Nigeria (NGN)
             if (userCurrency === 'NGN') {
-                // Fixed prices for Nigeria
-                if (usdAmount === 50) return 50000; // Premium price
-                if (usdAmount === 150) return 150000; // Premium high price
-                if (usdAmount === 300) return 300000; // Mentorship price
-                if (usdAmount === 600) return 600000; // Mentorship high price
+                if (usdAmount === 50) return 50000;       // Premium base price
+                if (usdAmount === 150) return 150000;     // Premium high price
+                if (usdAmount === 300) return 300000;     // Mentorship base price
+                if (usdAmount === 600) return 600000;     // Mentorship high price
+                return usdAmount;                         // Standard is free (0)
+            }
+            // For United States (USD)
+            else if (userCurrency === 'USD') {
+                return usdAmount; // Prices are already in USD
+            }
+            // For United Kingdom (GBP)
+            else if (userCurrency === 'GBP') {
+                if (usdAmount === 50) return 50; 
+                if (usdAmount === 150) return 150;
+                if (usdAmount === 300) return 300;
+                if (usdAmount === 600) return 600;
+            }
+            // For Europe (EUR)
+            else if (userCurrency === 'EUR') {
+                if (usdAmount === 50) return 50;         
+                if (usdAmount === 150) return 150;       
+                if (usdAmount === 300) return 300;       
+                if (usdAmount === 600) return 600;       
+            }
+            // For Canada (CAD)
+            else if (userCurrency === 'CAD') {
+                if (usdAmount === 50) return 50;
+                if (usdAmount === 150) return 150;
+                if (usdAmount === 300) return 300;
+                if (usdAmount === 600) return 600;
+            }
+            // For Australia (AUD)
+            else if (userCurrency === 'AUD') {
+                if (usdAmount === 50) return 50; 
+                if (usdAmount === 150) return 150;
+                if (usdAmount === 300) return 300;
+                if (usdAmount === 600) return 600;
+            }
+            // For other countries, use exchange rates
+            else {
+                const rate = exchangeRates[userCurrency];
+                if (!rate) {
+                    console.warn(`No exchange rate for ${userCurrency}, using USD`);
+                    return usdAmount;
+                }
+                
+                let convertedAmount = usdAmount * rate;
+                
+                // Round to whole numbers for currencies that typically don't use decimals
+                if (['JPY', 'KRW', 'VND', 'IDR', 'NGN', 'KES'].includes(userCurrency)) {
+                    return Math.round(convertedAmount);
+                }
+                
+                // Round to 2 decimal places for others
+                return Math.round(convertedAmount * 100) / 100;
             }
             
-            if (userCurrency === 'USD') {
-                return usdAmount;
-            }
-            
-            const rate = exchangeRates[userCurrency];
-            if (!rate) {
-                console.warn(`No exchange rate for ${userCurrency}, using USD`);
-                return usdAmount;
-            }
-            
-            let convertedAmount = usdAmount * rate;
-            
-            // Round to appropriate decimal places
-            if (['JPY', 'KRW', 'VND', 'IDR', 'NGN', 'KES'].includes(userCurrency)) {
-                return Math.round(convertedAmount);
-            }
-            
-            return Math.round(convertedAmount * 100) / 100;
+            return usdAmount; // Fallback
         }
 
         // Format currency display
         function formatCurrency(amount, currency) {
             if (amount === 0) return "FREE";
             
-            if (['JPY', 'KRW', 'VND', 'IDR', 'NGN', 'KES'].includes(currency)) {
-                return `${userCurrencySymbol}${amount.toLocaleString()}`;
+            // Special formatting for different currencies
+            switch(currency) {
+                case 'GBP':
+                    return `£${amount.toLocaleString()}`;
+                case 'EUR':
+                    return `€${amount.toLocaleString()}`;
+                case 'CAD':
+                    return `CA$${amount.toLocaleString()}`;
+                case 'AUD':
+                    return `A$${amount.toLocaleString()}`;
+                case 'USD':
+                    return `$${amount.toLocaleString()}`;
+                case 'NGN':
+                    return `₦${amount.toLocaleString()}`;
+                case 'KES':
+                    return `KSh${amount.toLocaleString()}`;
+                case 'GHS':
+                    return `GH₵${amount.toLocaleString()}`;
+                case 'ZAR':
+                    return `R${amount.toLocaleString()}`;
+                case 'INR':
+                    return `₹${amount.toLocaleString()}`;
+                default:
+                    return `${userCurrencySymbol}${amount.toLocaleString()}`;
             }
-            return `${userCurrencySymbol}${amount.toFixed(2)}`;
         }
-
         // Render pricing cards
         function renderPricingCards() {
             const pricingContainer = document.getElementById('pricing-container');
