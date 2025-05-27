@@ -431,7 +431,7 @@
                 <h2 class="text-4xl font-bold text-center text-[#1D3557] mb-12">Meet Your Instructor</h2>
                 <div class="flex flex-col md:flex-row items-center gap-10">
                     <div class="flex-shrink-0">
-                        <img src="/instructor.jpeg" alt="Oluwatosin Babalola" class="w-64 h-64 object-cover shadow-xl rounded-full mx-auto md:mx-0" />
+                        <img src="/admin.jpeg" alt="Oluwatosin Babalola" class="w-64 h-64 object-cover shadow-xl rounded-full mx-auto md:mx-0" />
                     </div>
             
                     <!-- Instructor Bio -->
@@ -448,17 +448,17 @@
             </div>
     </section>
 
-    <!-- Guarantee Section -->
+    <!-- Commitment Section (Replaced Guarantee) -->
     <section class="py-12 bg-[#1D3557] text-white">
         <div class="container mx-auto px-4 text-center">
             <div class="max-w-4xl mx-auto">
                 <div class="guarantee-badge bg-[#E63946] inline-flex items-center justify-center rounded-full w-24 h-24 mb-6">
-                    <i class="fas fa-shield-alt text-4xl"></i>
+                    <i class="fas fa-handshake text-4xl"></i>
                 </div>
-                <h2 class="text-3xl font-bold mb-6">Our 30-Day Money-Back Guarantee</h2>
-                <p class="text-xl mb-8">We're so confident this challenge will transform your skills that we offer a full 30-day money-back guarantee. Complete the daily lessons, do the work, and if you don't see remarkable progress in your data skills within a month, we'll refund every penny. No questions asked.</p>
+                <h2 class="text-3xl font-bold mb-6">Our Commitment to Your Success</h2>
+                <p class="text-xl mb-8">We're dedicated to providing you with the most practical, actionable data analytics training available. Our structured approach ensures you build real skills through hands-on projects, not just theory. Plus, you'll get direct access to our community of students and mentors for support throughout your journey.</p>
                 <div class="bg-white text-[#1D3557] p-6 rounded-lg inline-block">
-                    <p class="font-bold text-lg">You risk nothing. The only risk is missing out.</p>
+                    <p class="font-bold text-lg">We're with you every step of the way on your data journey.</p>
                 </div>
             </div>
         </div>
@@ -478,7 +478,7 @@
                 <div id="detected-country" class="mt-2 text-sm text-gray-600"></div>
             </div>
     
-            <div id="pricing-container" class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+            <div id="pricing-container" class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
                 <!-- Pricing cards will be dynamically inserted here -->
             </div>
             
@@ -581,9 +581,9 @@
             
             <div class="text-center mt-12">
                 <h3 class="text-2xl font-bold mb-6 text-[#1D3557]">Still Have Questions?</h3>
-                <button onclick="scrollToEnroll()" class="bg-[#E63946] hover:bg-[#c1121f] text-white font-bold py-3 px-6 rounded-lg shadow-lg transition duration-300 transform hover:scale-105">
-                    JOIN THE CHALLENGE NOW <i class="fas fa-arrow-right ml-2"></i>
-                </button>
+                <a href="mailto:techsis292@gmail.com" class="bg-[#1D3557] hover:bg-[#0e1f3b] text-white font-bold py-3 px-6 rounded-lg shadow-lg transition duration-300 transform hover:scale-105 inline-block">
+                    SEND US A MAIL <i class="fas fa-envelope ml-2"></i>
+                </a>
             </div>
         </div>
     </section>
@@ -688,8 +688,11 @@
                 // Redirect to YouTube for free access
                 window.location.href = "https://www.youtube.com/watch?v=iQPCnPJapR0";
                 return;
-            } else {
-                window.location.href = "https://selar.com/s00145"
+            } else if (plan === 'premium') {
+                window.location.href = "https://selar.com/s00145";
+                return;
+            } else if (plan === 'mentorship') {
+                window.location.href = "https://selar.com/33c76g";
                 return;
             }
         }
@@ -761,8 +764,10 @@
         const usdPricing = {
             standard: 0,
             premium: 50,
+            mentorship: 200,
             standardHigh: 0,
-            premiumHigh: 150
+            premiumHigh: 150,
+            mentorshipHigh: 600
         };
 
         let exchangeRates = {};
@@ -880,6 +885,8 @@
                 // Fixed prices for Nigeria
                 if (usdAmount === 50) return 50000; // Premium price
                 if (usdAmount === 150) return 150000; // Premium high price
+                if (usdAmount === 300) return 300000; // Mentorship price
+                if (usdAmount === 600) return 600000; // Mentorship high price
             }
             
             if (userCurrency === 'USD') {
@@ -919,8 +926,10 @@
             
             const standardPrice = convertToLocalCurrency(usdPricing.standard);
             const premiumPrice = convertToLocalCurrency(usdPricing.premium);
+            const mentorshipPrice = convertToLocalCurrency(usdPricing.mentorship);
             const standardPriceHigh = convertToLocalCurrency(usdPricing.standardHigh);
             const premiumPriceHigh = convertToLocalCurrency(usdPricing.premiumHigh);
+            const mentorshipPriceHigh = convertToLocalCurrency(usdPricing.mentorshipHigh);
             
             // Standard Card
             pricingContainer.appendChild(createPricingCard(
@@ -952,6 +961,24 @@
                 ],
                 true,
                 'premium'
+            ));
+            
+            // Mentorship Card
+            pricingContainer.appendChild(createPricingCard(
+                'Live Mentorship',
+                formatCurrency(mentorshipPrice, userCurrency),
+                formatCurrency(mentorshipPriceHigh, userCurrency),
+                [
+                    'Everything in Premium',
+                    'Weekly 1-on-1 mentorship sessions',
+                    'Unlimited project reviews',
+                    'Personalized career coaching',
+                    'Interview preparation & mock interviews',
+                    'Priority support',
+                    'Exclusive mentorship community'
+                ],
+                false,
+                'mentorship'
             ));
         }
 
@@ -1011,7 +1038,7 @@
             
             const button = document.createElement('button');
             button.className = `w-full ${isPopular ? 'bg-[#E63946] hover:bg-[#c1121f]' : 'bg-[#1D3557] hover:bg-[#0e1f3b]'} text-white font-bold py-3 px-6 rounded-lg shadow-lg transition duration-300`;
-            button.textContent = price === "FREE" ? 'GET FREE ACCESS' : 'ENROLL NOW';
+            button.textContent = price === "FREE" ? 'GET FREE ACCESS' : 'GET ACCESS';
             button.onclick = function() { showPaymentForm(planType); };
             card.appendChild(button);
             
